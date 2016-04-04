@@ -20,6 +20,14 @@ public class WebConfig {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/*").allowedOrigins(
 						"http://localhost:8090");
+				registry.addMapping("/offer/*").allowedOrigins(
+						"http://localhost:8090");
+				registry.addMapping("/user/**").allowedOrigins(
+						"http://localhost:8090");
+				registry.addMapping("/offer/*/referral").allowedOrigins(
+						"http://localhost:8090");
+				registry.addMapping("/offer/*/interest").allowedOrigins(
+						"http://localhost:8090");
 			}
 		};
 	}

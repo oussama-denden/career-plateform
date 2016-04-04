@@ -1,0 +1,85 @@
+/*!
+ * Start Bootstrap - Heroic Features HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+/***** navigation *****/
+.navbar-login {
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session {
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.icon-size {
+    font-size: 87px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #002D5C;
+}
+
+.hero-spacer {
+    margin-top: 50px;
+}
+
+/***** project *****/
+
+.project {
+    //margin-bottom: 30px;
+}
+.project .thumbnail {
+	overflow: auto;
+}
+
+.project .list-group .list-group-item {
+	padding: 5px 0px;
+	border: none;
+}
+
+/**** formular *****/
+
+.form-spacer{
+	margin-bottom: 20px;
+    border: 0;
+    border-top: 2px solid #eee;
+    width: 70%;
+}
+
+.add-offer .control-label{
+	text-align: left;
+}
+
+.add-offer .form-fields{
+	margin-left: 2%;
+	margin-top: 2%;
+}
+
+.easyeditor-toolbar{
+	padding-top: 12px;
+    padding-bottom: 0px;
+    padding-left: 1px;
+    padding-right: 1px
+}
+
+.add-offer .bootstrap-tagsinput{
+	width: 100%;
+}
+
+.btn-margin-right{
+	margin-right: 10px;
+}
+
+footer {
+    margin: 50px 0;
+}

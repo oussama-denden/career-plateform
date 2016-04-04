@@ -17,16 +17,38 @@
 
 
 SET foreign_key_checks = 0;
-TRUNCATE project;
+TRUNCATE offer;
+TRUNCATE referral;
+TRUNCATE portaluser;
 
 --
--- Dumping data for table `project`
+-- Dumping data for table `offer`
 --
 
-LOCK TABLES `project` WRITE;
-/*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` (id,title,country,location,duration,probability,skills) VALUES (1,'Developer Opportunity','Germany', 'DE-Stuttgart', 'Short Term', '100%', 'Teamcenter, web...'),(2,'Developer Opportunity','Germany', 'DE-Stuttgart', 'Short Term', '100%', 'Teamcenter, web...'),(3,'Developer Opportunity','Germany', 'DE-Stuttgart', 'Short Term', '100%', 'Teamcenter, web...'),(4,'Developer Opportunity','India', 'IN-New Delhi', 'Short Term', '100%', 'Teamcenter, web...');
-/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+LOCK TABLES `offer` WRITE;
+/*!40000 ALTER TABLE `offer` DISABLE KEYS */;
+INSERT INTO `offer` VALUES (1,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','HR','Internal'),
+(2,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Developer','Internal'),
+(3,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Product Owner','Internal'),
+(4,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Team Leader','Internal'),
+(5,'Yes','Admin','New-Delphi','India','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Architect','Internal');
+/*!40000 ALTER TABLE `offer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `portaluser`
+--
+
+LOCK TABLES `portaluser` WRITE;
+/*!40000 ALTER TABLE `portaluser` DISABLE KEYS */;
+INSERT INTO `portaluser` VALUES (1,'password',NULL,'HR_GERMANY','Christina'),
+								(2,'password',NULL,'ADMIN','MOEZ'),
+								(3,'password',NULL,'HR_INDIA','Naveen'),
+								(4,'password',NULL,'HR_TUNISIA','Sawssen'),
+								(5,'password',NULL,'USER','Akrem'),
+								(6,'password',NULL,'USER','Gerog'),
+								(7,'password',NULL,'USER','Oussama');
+/*!40000 ALTER TABLE `portaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
 SET foreign_key_checks = 1;

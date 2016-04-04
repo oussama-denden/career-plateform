@@ -1,9 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router'
 
 var Project = React.createClass({
 
   render : function(){
-    console.log(this.props.project.location);
     return (
       <div className="col-md-4 col-sm-6 project">
           <div className="thumbnail">
@@ -16,7 +16,7 @@ var Project = React.createClass({
 							        <li className="list-group-item">Skills : {this.props.project.skills}</li>
 						    </ul>
                 <p>
-                  <a href="#" className="btn btn-link pull-right">Show <i className="fa fa-angle-double-right"></i></a>
+                  <Link className="btn btn-link pull-right" to={`/Offer/${this.props.project.id}`}>Show <i className="fa fa-angle-double-right"></i></Link>
                 </p>
             </div>
           </div>
