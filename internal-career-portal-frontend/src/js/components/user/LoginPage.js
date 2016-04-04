@@ -12,6 +12,16 @@ var LoginPage = React.createClass({
     router: React.PropTypes.object.isRequired
   },
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
+  componentWillMount: function() {
+    if(UserStore.getUser().userLoggedIn) {
+      this.context.router.push('/');
+    }
+  },
+
   render : function() {
 
     return (
@@ -41,9 +51,13 @@ var LoginPage = React.createClass({
   onChange: function(event, data) {
     switch (event) {
       case 'user_login':
+
       if(data.errorCode == 0) {
           this.context.router.push('/login/' + 1);
-      } else {
+      } else if(this.props.params.loginAttempt > 0) {
+        this.context.router.push('/Offer/' + this.props.params.loginAttempt);
+      }
+      else {
         this.context.router.push('/');
       }
       break;

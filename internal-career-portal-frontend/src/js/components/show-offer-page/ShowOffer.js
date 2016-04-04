@@ -4,11 +4,17 @@ import Footer from '../Footer';
 import Referral from './Referral';
 import ShowInterest from './ShowInterest';
 import ProjectStore from '../../stores/project-store';
+import UserStore from '../../stores/user-store';
 import ProjectActions from '../../actions/project-actions';
+import UserConstants from '../../constants/user-constants';
 
 var ShowOffer = React.createClass({
 
-  mixins : [Reflux.listenTo(ProjectStore, 'onChange')],
+  mixins : [Reflux.listenTo(ProjectStore, 'onChange'), Reflux.listenTo(UserStore, 'onChange')],
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
 
   getInitialState : function() {
     return {
@@ -26,7 +32,14 @@ var ShowOffer = React.createClass({
      case 'oneProject':
      this.setState(data);
      break;
-
+     case 'user_logout':
+     this.setState(
+       {
+         showInterest: 'false',
+         referral: 'false'
+       }
+     );
+     break;
      default:
    }
   },
@@ -34,12 +47,23 @@ var ShowOffer = React.createClass({
   render : function () {
 
     var application = '';
-    if(this.state.showInterest == 'true'){
-      application = <ShowInterest title={this.state.title} id={this.state.id} />;
-    }
+    var applicationButtons = '';
+    var user = UserStore.getUser();
+    if(!user.userLoggedIn || user.role === UserConstants.role.user)  {
+      if(this.state.showInterest == 'true'){
+        application = <ShowInterest title={this.state.title} id={this.state.id} />;
+      }
 
-    if(this.state.referral == 'true'){
-      application = <Referral title={this.state.title} id={this.state.id} />;
+      if(this.state.referral == 'true'){
+        application = <Referral title={this.state.title} id={this.state.id} />;
+      }
+
+      applicationButtons = (
+                          <div className="pull-right form-group">
+                            <button type="button" className="btn btn-primary show-interest-btn" onClick={this.showInterest}>Show Interest</button>
+                            <button type="button" className="btn btn-primary" onClick={this.referral}>Referral</button>
+                          </div>
+                        );
     }
 
     return (
@@ -121,10 +145,7 @@ var ShowOffer = React.createClass({
             </div>
         </div>
 
-  			<div className="pull-right form-group">
-  				<button type="button" className="btn btn-primary" onClick={this.showInterest}>Show Interest</button>
-          <button type="button" className="btn btn-primary" onClick={this.referral}>Referral</button>
-  			</div>
+  			{applicationButtons}
 
         <div className="row">
           {application}
@@ -134,17 +155,28 @@ var ShowOffer = React.createClass({
   },
 
   showInterest : function(){
-    this.setState({
-      showInterest: 'true',
-      referral: 'false'
-    });
+    var user = UserStore.getUser();
+    if(!user.userLoggedIn) {
+      this.context.router.push('/login/' + this.props.params.projectId);
+    } else {
+      this.setState({
+        showInterest: 'true',
+        referral: 'false'
+      });
+    }
+
   },
 
   referral : function(){
+    var user = UserStore.getUser();
+    if(!user.userLoggedIn) {
+      this.context.router.push('/login/' + this.props.params.projectId);
+    } else {
     this.setState({
       referral: 'true',
       showInterest: 'false'
     });
+    }
   }
 
 });

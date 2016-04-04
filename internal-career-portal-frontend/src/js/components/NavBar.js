@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router'
 import LoginWidget from './user/LoginWidget';
 import UserStore from '../stores/user-store';
 
@@ -15,7 +16,9 @@ var NavBar = React.createClass({
   					<span className="icon-bar"></span>
   					<span className="icon-bar"></span>
   				</button>
-  				<img src="http://www.piterion.com/fileadmin/templates/Public/Images/logo_piterion.png" height="43" width="226" />
+          <Link to={`/`}>
+  				    <img src="http://www.piterion.com/fileadmin/templates/Public/Images/logo_piterion.png" height="43" width="226" />
+          </Link>
   			</div>
         {login}
       </div>

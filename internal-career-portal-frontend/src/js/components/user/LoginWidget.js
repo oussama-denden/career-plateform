@@ -13,14 +13,7 @@ var LoginWidget = React.createClass({
   },
 
   getInitialState : function() {
-    return {
-      username: localStorage.getItem('username') ? localStorage.getItem('username') : '',
-      password: '',
-      rememberMe: localStorage.getItem('rememberMe') ? localStorage.getItem('rememberMe') : false,
-      role: localStorage.getItem('role') ? localStorage.getItem('role') : '',
-      userLoggedIn: localStorage.getItem('userLoggedIn') ? localStorage.getItem('userLoggedIn') : false
-
-    }
+    return UserStore.getUser();
   },
 
   render : function(){
@@ -162,7 +155,6 @@ var LoginWidget = React.createClass({
       if(data.errorCode == 0) {
           this.context.router.push('/login/' + 1);
       } else {
-        console.log(data);
         this.setState(data);
       }
       break;

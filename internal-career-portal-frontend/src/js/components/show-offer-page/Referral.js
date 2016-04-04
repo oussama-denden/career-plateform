@@ -6,6 +6,10 @@ import ProjectActions from '../../actions/project-actions';
 import { browserHistory } from 'react-router';
 import DateTimeField from 'react-bootstrap-datetimepicker';
 import moment from 'react-bootstrap-datetimepicker/node_modules/moment';
+import Joi from 'joi';
+import validation from 'react-validation-mixin';
+import strategy from 'joi-validation-strategy';
+import classnames from 'classnames';
 
 var Referral = React.createClass({
 
@@ -13,6 +17,19 @@ var Referral = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+
+  validatorTypes: {
+    name: Joi.string().required().label('Name'),
+    email: Joi.string().email().required().label('Email'),
+    dateOfBirth: Joi.date().required().label('Date Of Birth'),
+    placeOfBirth: Joi.string().required().label('Place Of Birth'),
+    currentDesignation: Joi.string().required().label('Current Designation'),
+    comments: Joi.string().required().label('Comments')
+  },
+
+  getValidatorData: function() {
+    return this.state;
   },
 
   getInitialState : function(){
@@ -38,17 +55,19 @@ var Referral = React.createClass({
       <hr/>
       <fieldset>
 
-        <div className="form-group">
+        <div className={this.getClasses('name')}>
           <label className="col-md-3 control-label" htmlFor="name">Name</label>
           <div className="col-md-6">
           <input id="name" name="name" type="text" placeholder="" className="form-control input-md" required="" ref="name" value={this.state.name} onChange={this.onFormInputChange}/>
+          {this.renderHelpText(this.props.getValidationMessages('name'))}
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('email')}>
           <label className="col-md-3 control-label" htmlFor="email">Email</label>
           <div className="col-md-6">
           <input id="email" name="email" type="text" placeholder="" className="form-control input-md" required="" ref="email" value={this.state.email} onChange={this.onFormInputChange}/>
+          {this.renderHelpText(this.props.getValidationMessages('email'))}
           </div>
         </div>
 
@@ -77,24 +96,27 @@ var Referral = React.createClass({
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('dateOfBirth')}>
           <label className="col-md-3 control-label" htmlFor="dateOfBirth">Date Of Birth</label>
           <div className="col-md-6">
           <DateTimeField inputFormat="YYYY-MM-DD" format="YYYY-MM-DD" viewMode="days" mode="date"  dateTime={this.state.dateOfBirth} minDate={moment()} maxDate={moment().add(2, 'months')} onChange={this.onDateOfBirthChange} />
+          {this.renderHelpText(this.props.getValidationMessages('dateOfBirth'))}
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('placeOfBirth')}>
           <label className="col-md-3 control-label" htmlFor="placeOfBirth">Place Of Birth</label>
           <div className="col-md-6">
           <input id="placeOfBirth" name="placeOfBirth" type="text" placeholder="" className="form-control input-md" required="" ref="placeOfBirth" value={this.state.placeOfBirth} onChange={this.onFormInputChange}/>
+          {this.renderHelpText(this.props.getValidationMessages('placeOfBirth'))}
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('currentDesignation')}>
           <label className="col-md-3 control-label" htmlFor="current-designation">Current Designation</label>
           <div className="col-md-6">
           <input id="current-designation" name="current-designation" type="text" placeholder="" className="form-control input-md" required="" ref="currentDesignation" value={this.state.currentDesignation} onChange={this.onFormInputChange}/>
+          {this.renderHelpText(this.props.getValidationMessages('currentDesignation'))}
           </div>
         </div>
 
@@ -105,10 +127,11 @@ var Referral = React.createClass({
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('comments')}>
           <label className="col-md-3 control-label" htmlFor="comments">Comments</label>
           <div className="col-md-6">
           <textarea name="comments" id="comments" rows="10" placeholder="" className="form-control" ref="comments" value={this.state.comments} onChange={this.onFormInputChange}  />
+          {this.renderHelpText(this.props.getValidationMessages('comments'))}
           </div>
         </div>
 
@@ -149,10 +172,54 @@ var Referral = React.createClass({
     }
   },
 
+  renderHelpText : function(messages) {
+    var htmlMessages = [];
+    messages.map(message =>{
+        htmlMessages.push(
+          <span key={message} className='help-block'>{message}</span>
+        )
+      });
+    return (
+      <div>
+        {htmlMessages}
+     </div>
+    );
+  },
+
+  getClasses : function(field) {
+    return classnames({
+      'form-group': true,
+      'has-error': !this.props.isValid(field)
+    });
+  },
+
   send : function(){
-    ProjectActions.addReferral(this.props.id, this.state);
+    console.log(this.state);
+    const onValidate = (error) => {
+      console.log(error);
+      if (!error) {
+        ProjectActions.addReferral(this.props.id, this.state);
+      }
+    };
+    this.props.validate(onValidate);
   }
 
 });
 
-export default Referral;
+Referral.propTypes = {
+  errors: React.PropTypes.object,
+  validate: React.PropTypes.func,
+  isValid: React.PropTypes.func,
+  handleValidation: React.PropTypes.func,
+  getValidationMessages: React.PropTypes.func,
+  clearValidations: React.PropTypes.func,
+};
+
+const options = {
+  language: {
+    date: {
+      base: '"{{key}}" must be a valid date format YYYY-MM-DD',
+    }
+  }
+};
+export default validation(strategy(options))(Referral);

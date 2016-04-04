@@ -6,6 +6,10 @@ import ProjectActions from '../../actions/project-actions';
 import { browserHistory } from 'react-router';
 import DateTimeField from 'react-bootstrap-datetimepicker';
 import moment from 'react-bootstrap-datetimepicker/node_modules/moment';
+import Joi from 'joi';
+import validation from 'react-validation-mixin';
+import strategy from 'joi-validation-strategy';
+import classnames from 'classnames';
 
 var ShowInterest = React.createClass({
 
@@ -13,6 +17,18 @@ var ShowInterest = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+
+  validatorTypes: {
+    availabilityFrom: Joi.date().required().label('Availability From'),
+    availabilityTo: Joi.date().required().label('Availability To'),
+    cv: Joi.string().required().label('Curriculum Vitae'),
+    teamLeader: Joi.string().required().label('Team Leader'),
+    currentProject: Joi.string().required().label('Current Project')
+  },
+
+  getValidatorData: function() {
+    return this.state;
   },
 
   getInitialState : function(){
@@ -37,18 +53,18 @@ var ShowInterest = React.createClass({
 
         <div className="form-group">
           <label className="col-md-3 control-label" htmlFor="availability">Availability</label>
-          <div className="col-md-3">
-          <label className="col-md-3 control-label">From</label>
-          <div className="input-group date">
-            <DateTimeField inputFormat="YYYY-MM-DD" format="YYYY-MM-DD" viewMode="days" mode="date"  dateTime={this.state.availabilityFrom} minDate={moment()} maxDate={moment().add(2, 'months')} onChange={this.onAvailabilityfromChange} />
-          </div>
-          </div>
-          <div className="col-md-3">
-          <label className="col-md-3 control-label">To</label>
-          <div className="input-group date">
-            <DateTimeField inputFormat="YYYY-MM-DD" format="YYYY-MM-DD" viewMode="days" mode="date"  dateTime={this.state.availabilityTo} minDate={moment()} maxDate={moment().add(2, 'months')} onChange={this.onAvailabilitytoChange} />
-          </div>
-          </div>
+            <div className={"col-md-3 " + this.getClasses('availabilityFrom')}>
+              <label className="col-md-3 control-label">From</label>
+              <div className="input-group date">
+                <DateTimeField inputFormat="YYYY-MM-DD" format="YYYY-MM-DD" viewMode="days" mode="date"  dateTime={this.state.availabilityFrom} minDate={moment()} maxDate={moment().add(2, 'months')} onChange={this.onAvailabilityfromChange} />
+              </div>
+            </div>
+            <div className={"col-md-3 " + this.getClasses('availabilityTo')}>
+              <label className="col-md-3 control-label">To</label>
+              <div className="input-group date">
+                <DateTimeField inputFormat="YYYY-MM-DD" format="YYYY-MM-DD" viewMode="days" mode="date"  dateTime={this.state.availabilityTo} minDate={moment()} maxDate={moment().add(2, 'months')} onChange={this.onAvailabilitytoChange} />
+              </div>
+            </div>
         </div>
 
         <div className="form-group">
@@ -61,24 +77,27 @@ var ShowInterest = React.createClass({
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('cv')}>
           <label className="col-md-3 control-label" htmlFor="cv">Curriculum Vitae</label>
           <div className="col-md-6">
           <input id="cv" name="cv" type="text" placeholder="Link" className="form-control input-md" required="" ref="cv" value={this.state.cv} onChange={this.onFormInputChange} />
+          {this.renderHelpText(this.props.getValidationMessages('cv'))}
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('teamLeader')}>
           <label className="col-md-3 control-label" htmlFor="teamleader">Team Leader</label>
           <div className="col-md-6">
           <input id="teamleader" name="teamleader" type="text" placeholder="" className="form-control input-md" required="" ref="teamleader" value={this.state.teamleader} onChange={this.onFormInputChange} />
+          {this.renderHelpText(this.props.getValidationMessages('teamLeader'))}
           </div>
         </div>
 
-        <div className="form-group">
+        <div className={this.getClasses('currentProject')}>
           <label className="col-md-3 control-label" htmlFor="currentproject">Current Project</label>
           <div className="col-md-6">
           <input id="currentproject" name="currentproject" type="text" placeholder="" className="form-control input-md" required="" ref="currentproject" value={this.state.currentproject} onChange={this.onFormInputChange} />
+          {this.renderHelpText(this.props.getValidationMessages('currentProject'))}
           </div>
         </div>
 
@@ -107,9 +126,27 @@ var ShowInterest = React.createClass({
       this.setState({availabilityTo: date});
   },
 
+  renderHelpText : function(message) {
+    return (
+     <span className='help-block'>{message}</span>
+    );
+  },
+
+  getClasses : function(field) {
+    return classnames({
+      'form-group': true,
+      'has-error': !this.props.isValid(field)
+    });
+  },
+
   send : function(){
     console.log(this.state);
-    ProjectActions.showInterest(this.props.id, this.state);
+    const onValidate = (error) => {
+      if (!error) {
+        ProjectActions.showInterest(this.props.id, this.state);
+      }
+    };
+    this.props.validate(onValidate);
   },
 
   onChange: function(event) {
@@ -124,4 +161,13 @@ var ShowInterest = React.createClass({
 
 });
 
-export default ShowInterest;
+ShowInterest.propTypes = {
+  errors: React.PropTypes.object,
+  validate: React.PropTypes.func,
+  isValid: React.PropTypes.func,
+  handleValidation: React.PropTypes.func,
+  getValidationMessages: React.PropTypes.func,
+  clearValidations: React.PropTypes.func,
+};
+
+export default validation(strategy)(ShowInterest);

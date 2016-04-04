@@ -3,16 +3,38 @@ import Reflux from 'reflux';
 import ReactDOM from 'react-dom';
 import ProjectStore from '../../stores/project-store';
 import ProjectActions from '../../actions/project-actions';
+import UserStore from '../../stores/user-store';
+import UserConstants from '../../constants/user-constants';
 import DateTimeField from 'react-bootstrap-datetimepicker';
 import moment from 'react-bootstrap-datetimepicker/node_modules/moment';
 import { browserHistory } from 'react-router';
+import Joi from 'joi';
+import validation from 'react-validation-mixin';
+import strategy from 'joi-validation-strategy';
+import classnames from 'classnames';
+
 
 var JobForm = React.createClass({
 
-  mixins : [Reflux.listenTo(ProjectStore, 'onChange')],
+  mixins : [Reflux.listenTo(ProjectStore, 'onChange'), Reflux.listenTo(UserStore, 'onChange')],
 
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+
+  validatorTypes: {
+    title: Joi.string().required().label('Title'),
+    link: Joi.string().required().label('Link'),
+    salesManager: Joi.string().required().label('Sales Manager'),
+    hrResponsible: Joi.string().required().label('HR Responsible'),
+    teamLeader: Joi.string().required().label('Team Leader'),
+    description: Joi.string().required().label('Description'),
+    startDate: Joi.date().required().label('Start Date'),
+    skills: Joi.string().required().label('Skills')
+  },
+
+  getValidatorData: function() {
+    return this.state;
   },
 
   getInitialState : function() {
@@ -36,6 +58,10 @@ var JobForm = React.createClass({
     };
   },
 
+  componentWillMount : function () {
+    this.checkPermissions();
+  },
+
   render : function () {
     return (
       <div className="container">
@@ -45,39 +71,44 @@ var JobForm = React.createClass({
   			<h4>Job</h4>
   			<div classNameName="form-spacer center-block" ></div>
   			<fieldset className="form-fields">
-  				<div className="form-group">
+  				<div className={this.getClasses('title')}>
   				  <label className="col-md-3 control-label" htmlFor="textinput">Title</label>
   				  <div className="col-md-6">
   				  <input id="textinput" name="textinput" type="text" placeholder="Title" className="form-control input-md" required="" ref="title" value={this.state.title} onChange={this.onFromInputChange}/>
-  				  </div>
+            {this.renderHelpText(this.props.getValidationMessages('title'))}
+            </div>
   				</div>
 
-  				<div className="form-group">
+  				<div className={this.getClasses('link')}>
   				  <label className="col-md-3 control-label" htmlFor="link">Link</label>
   				  <div className="col-md-6">
   				  <input id="link" name="link" type="text" placeholder="Link" className="form-control input-md" required="" ref="link" value={this.state.link} onChange={this.onFromInputChange}/>
-  				  </div>
+            {this.renderHelpText(this.props.getValidationMessages('link'))}
+            </div>
   				</div>
 
-  				<div className="form-group">
+  				<div className={this.getClasses('salesManager')}>
   				  <label className="col-md-3 control-label" htmlFor="salesmanager">Sales Manager</label>
   				  <div className="col-md-6">
   				  <input id="salesmanager" name="salesmanager" type="text" placeholder="Sales Manager" className="form-control input-md" required="" ref="salesManager" value={this.state.salesManager} onChange={this.onFromInputChange}/>
-  				  </div>
+            {this.renderHelpText(this.props.getValidationMessages('salesManager'))}
+            </div>
   				</div>
 
-  				<div className="form-group">
+  				<div className={this.getClasses('hrResponsible')}>
   				  <label className="col-md-3 control-label" htmlFor="hrresponsible">HR Responsible</label>
   				  <div className="col-md-6">
   				  <input id="hrresponsible" name="hrresponsible" type="text" placeholder="HR Responsible" className="form-control input-md" required="" ref="hrResponsible" value={this.state.hrResponsible} onChange={this.onFromInputChange}/>
-  				  </div>
+            {this.renderHelpText(this.props.getValidationMessages('hrResponsible'))}
+            </div>
   				</div>
 
-  				<div className="form-group">
+  				<div className={this.getClasses('teamLeader')}>
   				  <label className="col-md-3 control-label" htmlFor="teamleader">Team Leader</label>
   				  <div className="col-md-6">
   				  <input id="teamleader" name="teamleader" type="text" placeholder="Team Leader" className="form-control input-md" required="" ref="teamLeader" value={this.state.teamLeader} onChange={this.onFromInputChange}/>
-  				  </div>
+            {this.renderHelpText(this.props.getValidationMessages('teamLeader'))}
+            </div>
   				</div>
 
   				<div className="form-group">
@@ -132,11 +163,12 @@ var JobForm = React.createClass({
   				  </div>
   				</div>
 
-  				<div className="form-group">
+  				<div className={this.getClasses('description')}>
   				  <label className="col-md-3 control-label" htmlFor="description">Description</label>
   				  <div className="col-md-6">
   					<textarea name="description" id="description" rows="10" placeholder="Description" className="form-control" ref="description" value={this.state.description} onChange={this.onFromInputChange} />
-  				  </div>
+            {this.renderHelpText(this.props.getValidationMessages('description'))}
+            </div>
   				</div>
   			</fieldset>
 
@@ -171,12 +203,11 @@ var JobForm = React.createClass({
   			<h4>Duration</h4>
   			<div className="form-spacer" ></div>
   			<fieldset className="form-fields">
-  				<div className="form-group">
+  				<div className={this.getClasses('startDate')}>
   				  <label className="col-md-3 control-label" htmlFor="startdate">Start Date</label>
   				  <div className="col-md-6">
-  					<div className="input-group date">
             <DateTimeField inputFormat="YYYY-MM-DD" format="YYYY-MM-DD" viewMode="days" mode="date"  dateTime={this.state.startDate} minDate={moment()} maxDate={moment().add(2, 'months')} onChange={this.onStartDateChange} />
-  					</div>
+            {this.renderHelpText(this.props.getValidationMessages('startDate'))}
   				  </div>
   				</div>
 
@@ -195,11 +226,12 @@ var JobForm = React.createClass({
   			<h4>Skills</h4>
   			<div className="form-spacer" ></div>
   			<fieldset className="form-fields">
-  				<div className="form-group">
+  				<div className={this.getClasses('skills')}>
   					<label className="col-md-3 control-label"></label>
   					<div className="col-md-6">
   						<input data-role="tagsinput" id="skills" name="skills" type="text" className="form-control input-md" required="" ref="skills" value={this.state.skills} onChange={this.onFromInputChange}/>
-  					</div>
+              {this.renderHelpText(this.props.getValidationMessages('skills'))}
+            </div>
   				</div>
   			</fieldset>
 
@@ -253,8 +285,36 @@ var JobForm = React.createClass({
     this.setState({startDate: date});
   },
 
+  renderHelpText : function(messages) {
+    var htmlMessages = [];
+    messages.map(message =>{
+        htmlMessages.push(
+          <span key={message} className='help-block'>{message}</span>
+        )
+      });
+    return (
+      <div>
+        {htmlMessages}
+     </div>
+    );
+  },
+
+  getClasses : function(field) {
+    return classnames({
+      'form-group': true,
+      'has-error': !this.props.isValid(field)
+    });
+  },
+
   publish : function() {
-    ProjectActions.addOffer(this.state);
+    console.log(this.state);
+    const onValidate = (error) => {
+      console.log(error);
+      if (!error) {
+        ProjectActions.addOffer(this.state);
+      }
+    };
+    this.props.validate(onValidate);
   },
 
   onChange: function(event, data) {
@@ -263,10 +323,30 @@ var JobForm = React.createClass({
       this.context.router.push('/Offer/' + data);
       break;
 
+      case 'user_logout':
+      this.checkPermissions();
+      break;
       default:
+    }
+  },
+
+  checkPermissions : function() {
+    var user = UserStore.getUser();
+    if(!user.userLoggedIn || (user.userLoggedIn && (user.role === UserConstants.role.admin || user.role === UserConstants.role.user))) {
+      this.context.router.push('/');
     }
   }
 
 
 });
-export default JobForm;
+
+JobForm.propTypes = {
+  errors: React.PropTypes.object,
+  validate: React.PropTypes.func,
+  isValid: React.PropTypes.func,
+  handleValidation: React.PropTypes.func,
+  getValidationMessages: React.PropTypes.func,
+  clearValidations: React.PropTypes.func,
+};
+
+export default validation(strategy)(JobForm);

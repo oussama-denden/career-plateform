@@ -41,13 +41,13 @@ UNLOCK TABLES;
 
 LOCK TABLES `portaluser` WRITE;
 /*!40000 ALTER TABLE `portaluser` DISABLE KEYS */;
-INSERT INTO `portaluser` VALUES (1,'password',NULL,'HR_GERMANY','Christina'),
-								(2,'password',NULL,'ADMIN','MOEZ'),
-								(3,'password',NULL,'HR_INDIA','Naveen'),
-								(4,'password',NULL,'HR_TUNISIA','Sawssen'),
-								(5,'password',NULL,'USER','Akrem'),
-								(6,'password',NULL,'USER','Gerog'),
-								(7,'password',NULL,'USER','Oussama');
+INSERT INTO `portaluser` VALUES (1,'password',false,'HR_GERMANY','Christina'),
+								(2,'password',false,'ADMIN','MOEZ'),
+								(3,'password',false,'HR_INDIA','Naveen'),
+								(4,'password',false,'HR_TUNISIA','Sawssen'),
+								(5,'password',false,'USER','Akrem'),
+								(6,'password',false,'USER','Gerog'),
+								(7,'password',false,'USER','Oussama');
 /*!40000 ALTER TABLE `portaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
