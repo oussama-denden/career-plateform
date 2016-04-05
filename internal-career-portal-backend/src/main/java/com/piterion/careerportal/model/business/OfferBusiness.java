@@ -1,5 +1,10 @@
 package com.piterion.careerportal.model.business;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.piterion.careerportal.model.business.deserializer.DateDeserializer;
+
 
 public class OfferBusiness {
 
@@ -17,7 +22,7 @@ public class OfferBusiness {
 	
 	private String visibility;
 	
-	private String anu;
+	private Boolean anu;
 	
 	private String employer;
 	
@@ -29,7 +34,8 @@ public class OfferBusiness {
 
 	private String city;
 
-	private String startDate;
+	@JsonDeserialize(using = DateDeserializer.class)
+	private Date startDate;
 	
 	private String period;
 
@@ -112,12 +118,12 @@ public class OfferBusiness {
 	}
 
 
-	public String getAnu() {
+	public Boolean getAnu() {
 		return anu;
 	}
 
 
-	public void setAnu(String anu) {
+	public void setAnu(Boolean anu) {
 		this.anu = anu;
 	}
 
@@ -172,12 +178,12 @@ public class OfferBusiness {
 	}
 
 
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 

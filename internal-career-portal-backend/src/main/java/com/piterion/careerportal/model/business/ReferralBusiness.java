@@ -1,5 +1,10 @@
 package com.piterion.careerportal.model.business;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.piterion.careerportal.model.business.deserializer.DateDeserializer;
+
 public class ReferralBusiness {
 	
 private String name;
@@ -10,7 +15,8 @@ private String name;
 	
 	private String gendre;
 	
-	private String dateOfBirth;
+	@JsonDeserialize(using = DateDeserializer.class)
+	private Date dateOfBirth;
 	
 	private String placeOfBirth;
 	
@@ -54,11 +60,11 @@ private String name;
 		this.gendre = gendre;
 	}
 
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 

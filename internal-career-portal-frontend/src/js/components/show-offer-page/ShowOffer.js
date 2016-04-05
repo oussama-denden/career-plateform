@@ -6,6 +6,7 @@ import ShowInterest from './ShowInterest';
 import ProjectStore from '../../stores/project-store';
 import UserStore from '../../stores/user-store';
 import ProjectActions from '../../actions/project-actions';
+import moment from 'react-bootstrap-datetimepicker/node_modules/moment';
 import UserConstants from '../../constants/user-constants';
 
 var ShowOffer = React.createClass({
@@ -117,7 +118,7 @@ var ShowOffer = React.createClass({
         <div className="row">
           <label className="col-md-4 control-label">Start Date</label>
           <div className="col-md-8">
-            {this.state.startDate}
+            {moment(this.state.startDate).format('YYYY-MM-DD')}
             </div>
         </div>
         <div className="row">

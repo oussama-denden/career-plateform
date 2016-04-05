@@ -1,12 +1,20 @@
 import React from 'react';
+import Reflux from 'reflux';
 import { Link } from 'react-router'
-import LoginWidget from './user/LoginWidget';
 import UserStore from '../stores/user-store';
+import LoginWidget from './user/LoginWidget';
+import LogoutWidget from './user/LogoutWidget';
 
 var NavBar = React.createClass({
 
+  mixins : [Reflux.listenTo(UserStore, 'onChange')],
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   render : function(){
-    var login = this.props.isLogin ?   "" : <LoginWidget inline={true}/>;
+    var login = this.props.isLogin ? "" : UserStore.getUser().userLoggedIn ?   <LogoutWidget/> : <LoginWidget/>;
     return (
     <div className="navbar navbar-default navbar-fixed-top">
   		<div className="container">
@@ -24,7 +32,21 @@ var NavBar = React.createClass({
       </div>
     </div>
     );
-  }
+  },
+
+  onChange: function(event, data) {
+    switch (event) {
+      case 'user_login':
+      this.setState({});
+      break;
+
+      case 'user_logout':
+      this.setState({});
+      break;
+
+      default:
+    }
+  },
 });
 
 export default NavBar;

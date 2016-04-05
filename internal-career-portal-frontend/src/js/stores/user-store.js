@@ -10,8 +10,11 @@ var UserStore = Reflux.createStore({
         if(response.username !== undefined) {
           response.userLoggedIn = true;
           localStorage.setItem(UserConstants.userLocalStorageKey, JSON.stringify(response));
+          this.fireUpdate('user_login', response);
+        } else {
+          this.fireUpdate('login_failed', response);
         }
-        this.fireUpdate('user_login', response);
+
       }.bind(this));
     },
 

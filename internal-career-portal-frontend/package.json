@@ -15,8 +15,11 @@
     "react": "^0.14.7",
     "react-bootstrap-datetimepicker": "0.0.22",
     "react-date-picker": "^4.0.10",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^0.14.7",
     "react-router": "^2.0.1",
+    "react-tag-input": "^2.2.5",
     "react-validation-mixin": "^5.3.4",
     "reflux": "^0.4.0",
     "whatwg-fetch": "^0.11.0"

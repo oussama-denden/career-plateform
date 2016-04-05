@@ -27,11 +27,11 @@ TRUNCATE portaluser;
 
 LOCK TABLES `offer` WRITE;
 /*!40000 ALTER TABLE `offer` DISABLE KEYS */;
-INSERT INTO `offer` VALUES (1,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','HR','Internal'),
-(2,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Developer','Internal'),
-(3,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Product Owner','Internal'),
-(4,'Yes','Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Team Leader','Internal'),
-(5,'Yes','Admin','New-Delphi','India','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Architect','Internal');
+INSERT INTO `offer` VALUES (1,0,'Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','HR','Internal'),
+(2,0,'Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Developer','Internal'),
+(3,0,'Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Product Owner','Internal'),
+(4,0,'Admin','Stuttgart','Germany','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Team Leader','Internal'),
+(5,0,'Admin','New-Delphi','India','Some description of the offer','PITERION TUNISIA','Christina','http://www.piterion.com','Short Term','Customer Inquiry','Ingo','test','2016-04-01','Georg','Architect','Internal');
 /*!40000 ALTER TABLE `offer` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -1,5 +1,6 @@
 package com.piterion.careerportal.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class Offer {
 	
 	private String visibility;
 	
-	private String anu;
+	private Boolean anu;
 	
 	private String employer;
 	
@@ -42,7 +43,7 @@ public class Offer {
 
 	private String city;
 
-	private String startDate;
+	private Date startDate;
 	
 	private String period;
 
@@ -133,12 +134,12 @@ public class Offer {
 	}
 
 
-	public String getAnu() {
+	public Boolean getAnu() {
 		return anu;
 	}
 
 
-	public void setAnu(String anu) {
+	public void setAnu(Boolean anu) {
 		this.anu = anu;
 	}
 
@@ -193,12 +194,12 @@ public class Offer {
 	}
 
 
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 

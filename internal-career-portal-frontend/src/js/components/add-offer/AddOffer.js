@@ -12,6 +12,7 @@ import Joi from 'joi';
 import validation from 'react-validation-mixin';
 import strategy from 'joi-validation-strategy';
 import classnames from 'classnames';
+import {WithContext as ReactTags} from 'react-tag-input'
 
 
 var JobForm = React.createClass({
@@ -30,7 +31,7 @@ var JobForm = React.createClass({
     teamLeader: Joi.string().required().label('Team Leader'),
     description: Joi.string().required().label('Description'),
     startDate: Joi.date().required().label('Start Date'),
-    skills: Joi.string().required().label('Skills')
+    skillsTags: Joi.array().min(1).required().label('Skills')
   },
 
   getValidatorData: function() {
@@ -45,7 +46,7 @@ var JobForm = React.createClass({
       hrResponsible: '',
       teamLeader: '',
       visibility: 'External',
-      anu: 'Yes',
+      anu: true,
       employer: 'PITERION TUNISIA',
       category: 'Engineering',
       description: '',
@@ -54,6 +55,7 @@ var JobForm = React.createClass({
       startDate: moment().format('YYYY-MM-DD'),
       period: 'Short Term',
       skills: '',
+      skillsTags: [],
       probability: ''
     };
   },
@@ -129,11 +131,11 @@ var JobForm = React.createClass({
   				  <label className="col-md-3 control-label" htmlFor="anu">ANU</label>
   				  <div className="col-md-6">
   					<label className="radio-inline" htmlFor="anu-0">
-  					  <input type="radio" name="anu" id="anu-0" value="Yes" ref="anuYes" defaultChecked={this.state.anu === 'Yes' ? true : false} onChange={this.onFromInputChange}/>
+  					  <input type="radio" name="anu" id="anu-0" value="true" ref="anuYes" defaultChecked={this.state.anu} onChange={this.onFromInputChange}/>
   					  Yes
   					</label>
   					<label className="radio-inline" htmlFor="anu-1">
-  					  <input type="radio" name="anu" id="anu-1" value="No" ref="anuNo" defaultChecked={this.state.anu === 'No' ? true : false} onChange={this.onFromInputChange}/>
+  					  <input type="radio" name="anu" id="anu-1" value="false" ref="anuNo" defaultChecked={!this.state.anu} onChange={this.onFromInputChange}/>
   					  No
   					</label>
   				  </div>
@@ -229,7 +231,20 @@ var JobForm = React.createClass({
   				<div className={this.getClasses('skills')}>
   					<label className="col-md-3 control-label"></label>
   					<div className="col-md-6">
-  						<input data-role="tagsinput" id="skills" name="skills" type="text" className="form-control input-md" required="" ref="skills" value={this.state.skills} onChange={this.onFromInputChange}/>
+              <ReactTags
+                placeholder="Add new skills"
+                tags={this.state.skillsTags}
+                handleDelete={this.handleDelete}
+                handleAddition={this.handleAddition}
+                handleDrag={this.handleDrag}
+                classNames={{
+                    tags: 'ReactTags__tags',
+                    tagInput: 'ReactTags__input',
+                    selected: 'ReactTags__selected',
+                    tag: 'ReactTags__tag',
+                    remove: 'ReactTags__remove'
+                }}
+              />
               {this.renderHelpText(this.props.getValidationMessages('skills'))}
             </div>
   				</div>
@@ -261,7 +276,7 @@ var JobForm = React.createClass({
 
   onFromInputChange : function(event){
       var visibility = ReactDOM.findDOMNode(this.refs.visibilityInter).checked ? "Internal" : "External";
-      var anu = ReactDOM.findDOMNode(this.refs.anuYes).checked ? "Yes" : "No";
+      var anu = ReactDOM.findDOMNode(this.refs.anuYes).checked ? true : false;
       this.setState({
           title: ReactDOM.findDOMNode(this.refs.title).value,
           link: ReactDOM.findDOMNode(this.refs.link).value,
@@ -276,9 +291,44 @@ var JobForm = React.createClass({
           country: ReactDOM.findDOMNode(this.refs.country).value,
           city: ReactDOM.findDOMNode(this.refs.city).value,
           period: ReactDOM.findDOMNode(this.refs.period).value,
-          skills: ReactDOM.findDOMNode(this.refs.skills).value,
           probability: ReactDOM.findDOMNode(this.refs.probability).value
       });
+  },
+
+  handleDelete: function(i) {
+        var tags = this.state.skillsTags;
+        tags.splice(i, 1);
+        this.setState({skillsTags: tags});
+        this.updateSkills();
+  },
+
+  handleAddition: function(tag) {
+        var tags = this.state.skillsTags;
+        tags.push({
+            id: tags.length + 1,
+            text: tag
+        });
+        this.setState({skillsTags: tags});
+        this.updateSkills();
+  },
+
+  handleDrag: function(tag, currPos, newPos) {
+        var tags = this.state.skillsTags;
+
+        // mutate array
+        tags.splice(currPos, 1);
+        tags.splice(newPos, 0, tag);
+
+        // re-render
+        this.setState({ skillsTags: tags });
+        this.updateSkills();
+  },
+
+  updateSkills : function(){
+    var skills = this.state.skillsTags.map(skill => {
+      return skill.text;
+    });
+    this.setState({skills: skills.toString()});
   },
 
   onStartDateChange: function(date) {
@@ -307,10 +357,9 @@ var JobForm = React.createClass({
   },
 
   publish : function() {
-    console.log(this.state);
     const onValidate = (error) => {
-      console.log(error);
       if (!error) {
+        console.log(this.state);
         ProjectActions.addOffer(this.state);
       }
     };

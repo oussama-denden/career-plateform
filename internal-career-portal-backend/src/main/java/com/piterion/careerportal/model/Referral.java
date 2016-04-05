@@ -1,5 +1,7 @@
 package com.piterion.careerportal.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,7 +21,7 @@ public class Referral {
 	
 	private String gendre;
 	
-	private String dateOfBirth;
+	private Date dateOfBirth;
 	
 	private String placeOfBirth;
 	
@@ -71,11 +73,11 @@ public class Referral {
 		this.gendre = gendre;
 	}
 
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
