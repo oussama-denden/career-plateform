@@ -12,7 +12,8 @@ import Joi from 'joi';
 import validation from 'react-validation-mixin';
 import strategy from 'joi-validation-strategy';
 import classnames from 'classnames';
-import {WithContext as ReactTags} from 'react-tag-input'
+import {WithContext as ReactTags} from 'react-tag-input';
+import jwt_decode from 'jwt-decode';
 
 
 var JobForm = React.createClass({
@@ -381,7 +382,11 @@ var JobForm = React.createClass({
 
   checkPermissions : function() {
     var user = UserStore.getUser();
-    if(!user.userLoggedIn || (user.userLoggedIn && (user.role === UserConstants.role.admin || user.role === UserConstants.role.user))) {
+    var authorities;
+    if(user.token) {
+      authorities = jwt_decode(user.token).authorities;
+    }
+    if(!authorities || authorities[0].authority.indexOf(UserConstants.role.admin) > -1  || authorities[0].authority.indexOf(UserConstants.role.user) > -1) {
       this.context.router.push('/');
     }
   }

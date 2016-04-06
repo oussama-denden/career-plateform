@@ -93,3 +93,42 @@ footer {
 .show-interest-btn{
   margin-right: 5px;
 }
+
+/* tags input css */
+.ReactTags__selected a.ReactTags__remove{
+  color: white;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.ReactTags__selected span.ReactTags__tag{
+  border-radius: .25em;
+  background-color: #5bc0de;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  padding: 1px 5px;
+  margin: 0 1px;
+  cursor: move;
+  border-radius: 2px;
+  color: white;
+}
+
+.ReactTags__input{
+  margin-top: 1%;
+}
+
+.ReactTags__input input{
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  display: inline-block;
+  padding: 4px 6px;
+  color: #555;
+  vertical-align: middle;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 100%;
+  line-height: 22px;
+  cursor: text;
+}

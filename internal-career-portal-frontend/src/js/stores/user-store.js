@@ -6,10 +6,15 @@ import UserConstants from '../constants/user-constants';
 var UserStore = Reflux.createStore({
     listenables: [UserActions],
     login: function(data){
-      ProjectService.post('/user/login', {username: data.username, password: data.password, rememberMe: data.rememberMe}).then(function(response){
-        if(response.username !== undefined) {
+      ProjectService.login('/login', {username: data.username, password: data.password}).then(function(response){
+        if(response.status == 200) {
           response.userLoggedIn = true;
-          localStorage.setItem(UserConstants.userLocalStorageKey, JSON.stringify(response));
+          localStorage.setItem(UserConstants.userLocalStorageKey, JSON.stringify({
+            username: data.username,
+            token: response.headers.get('X-AUTH-TOKEN'),
+            rememberMe: false,
+            userLoggedIn: response.userLoggedIn
+          }));
           this.fireUpdate('user_login', response);
         } else {
           this.fireUpdate('login_failed', response);

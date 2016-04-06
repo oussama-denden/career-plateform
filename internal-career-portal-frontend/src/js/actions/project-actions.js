@@ -5,7 +5,10 @@ var ProjectActions = Reflux.createActions([
     'getProject',
     'addOffer',
     'addReferral',
-    'showInterest'
+    'showInterest',
+    'updateInterests',
+    'updateReferrals',
+    'getInterests'
 ]);
 
 export default ProjectActions;

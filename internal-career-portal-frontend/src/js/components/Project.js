@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
+import InterestsCounter from './hr/InterestsCounter';
+import ReferralsCounter from './hr/ReferralsCounter';
 
 var Project = React.createClass({
 
@@ -16,6 +18,8 @@ var Project = React.createClass({
 							        <li className="list-group-item">Skills : {this.props.project.skills}</li>
 						    </ul>
                 <p>
+                  <InterestsCounter offerID={this.props.project.id} count={this.props.project.interestsCount}/>
+                  <ReferralsCounter offerID={this.props.project.id} count={this.props.project.referralsCount}/>
                   <Link className="btn btn-link pull-right" to={`/Offer/${this.props.project.id}`}>Show <i className="fa fa-angle-double-right"></i></Link>
                 </p>
             </div>

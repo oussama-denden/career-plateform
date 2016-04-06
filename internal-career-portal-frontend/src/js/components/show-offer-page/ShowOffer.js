@@ -8,6 +8,7 @@ import UserStore from '../../stores/user-store';
 import ProjectActions from '../../actions/project-actions';
 import moment from 'react-bootstrap-datetimepicker/node_modules/moment';
 import UserConstants from '../../constants/user-constants';
+import jwt_decode from 'jwt-decode';
 
 var ShowOffer = React.createClass({
 
@@ -31,16 +32,14 @@ var ShowOffer = React.createClass({
   onChange : function (event, data) {
    switch (event) {
      case 'oneProject':
+     console.log(data);
      this.setState(data);
      break;
+
      case 'user_logout':
-     this.setState(
-       {
-         showInterest: 'false',
-         referral: 'false'
-       }
-     );
+     this.context.router.push('/');
      break;
+
      default:
    }
   },
@@ -49,8 +48,7 @@ var ShowOffer = React.createClass({
 
     var application = '';
     var applicationButtons = '';
-    var user = UserStore.getUser();
-    if(!user.userLoggedIn || user.role === UserConstants.role.user)  {
+    if(this.userCanApply())  {
       if(this.state.showInterest == 'true'){
         application = <ShowInterest title={this.state.title} id={this.state.id} />;
       }
@@ -58,10 +56,10 @@ var ShowOffer = React.createClass({
       if(this.state.referral == 'true'){
         application = <Referral title={this.state.title} id={this.state.id} />;
       }
-
+      var showInterestButton = this.state.isUserInterested ? <button type="button" className="btn btn-success show-interest-btn" disabled>Already Applied</button> : <button type="button" className="btn btn-primary show-interest-btn" onClick={this.showInterest}>Show Interest</button>;
       applicationButtons = (
                           <div className="pull-right form-group">
-                            <button type="button" className="btn btn-primary show-interest-btn" onClick={this.showInterest}>Show Interest</button>
+                            {showInterestButton}
                             <button type="button" className="btn btn-primary" onClick={this.referral}>Referral</button>
                           </div>
                         );
@@ -178,6 +176,11 @@ var ShowOffer = React.createClass({
       showInterest: 'false'
     });
     }
+  },
+
+  userCanApply : function() {
+    var user = UserStore.getUser();
+    return !user.token ||  jwt_decode(user.token).authorities[0].authority.indexOf(UserConstants.role.user) > -1;
   }
 
 });

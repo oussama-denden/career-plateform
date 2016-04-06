@@ -8,8 +8,6 @@ var ProjectStore = Reflux.createStore({
       ProjectService.get('/offer').then(function(data) {
         this.fireUpdate('allProjects', data);
       }.bind(this));
-
-
     },
 
     getProject : function(id){
@@ -34,6 +32,22 @@ var ProjectStore = Reflux.createStore({
       ProjectService.post('/offer/' + offerId + '/interest', data).then(function(){
         this.fireUpdate('interestAdded');
       }.bind(this));
+    },
+
+    updateInterests : function(offerID) {
+      ProjectService.get('/interest/' + offerID).then(function(data){
+        this.fireUpdate('interestsCount', data.length);
+      }.bind(this));
+    },
+
+    updateReferrals : function(offerID) {
+      ProjectService.get('/referral/' + offerID).then(function(data){
+        this.fireUpdate('referralsCount', data.length);
+      }.bind(this));
+    },
+
+    getInterests : function(offerId){
+
     },
 
     fireUpdate : function (event, data) {
